@@ -1,0 +1,7 @@
+{
+  "name": "detect-face",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
