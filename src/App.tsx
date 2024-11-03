@@ -32,6 +32,10 @@ import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import FaceAuth from './pages/FaceAuth';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+import Calendar from './pages/Calendar';
 
 setupIonicReact();
 
@@ -40,8 +44,11 @@ const App: React.FC = () => (
     <IonReactRouter>
       <IonRouterOutlet>
         <Route exact path="/home">
-          <Home />
+          <FaceAuth />
         </Route>
+        <Route path="/login" component={Login} exact />
+        <Route path="/dashboard" component={Dashboard} exact />
+        <Route path="/calendar" component={Calendar} exact />
         <Route exact path="/">
           <Redirect to="/home" />
         </Route>
