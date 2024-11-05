@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { IonIcon } from "@ionic/react";
 import {
@@ -20,8 +20,31 @@ import {
     homeOutline,
     notificationsOutline,
 } from "ionicons/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { useUser } from "../hook/useUser";
+import { getTranscript } from "../redux/slice/userSlice";
 
 export default function Dashboard() {
+    const [loadUserData, setLoadUserData] = useState<any>();
+    const dispatch = useDispatch();
+    const { loadUser } = useUser()
+    const user = useSelector((state: any) => state.user.user)
+
+    useEffect(() => {
+        if (!loadUserData && user != loadUserData) {
+            setLoadUserData(user);
+        }
+    }, [user, loadUserData]);
+
+    useEffect(() => {
+        loadUser();
+    }, [dispatch])
+
+    useEffect(()=>{
+        
+    },[])
+
+
     return (
         <div className="flex justify-center h-screen bg-gray-100">
             {/* Phần nền trên */}
@@ -29,11 +52,11 @@ export default function Dashboard() {
                 <div className="bg-gradient-to-b from-red-600 to-red-700 p-5 rounded-b-3xl">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h1 className="text-xl font-bold text-white">Hi, @lctiendat</h1>
-                            <p className="text-white text-sm opacity-75">IT220020 | Công nghệ thông tin</p>
+                            <h1 className="text-xl font-bold text-white">Hi, {loadUserData?.name}</h1>
+                            <p className="text-white text-sm opacity-75">{loadUserData?.code} | Công nghệ thông tin</p>
                         </div>
                         {/* Avatar placeholder */}
-                        <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
+                        <div className=""><img className="w-12 h-12 bg-gray-300 rounded-full" src={loadUserData?.avatar} alt="" /></div>
                     </div>
                     <button className="mt-4 text-xs bg-blue-200 text-blue-800 py-1 px-3 rounded-full">
                         2022-2025
@@ -76,8 +99,8 @@ export default function Dashboard() {
                     ))}
                 </div>
                 {/* Bottom Tab Navigation */}
-                {/* <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t flex justify-around py-3">
-                    <Link to="/" className="flex flex-col items-center">
+                <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t flex justify-around py-3">
+                    <Link to="/dashboard" className="flex flex-col items-center">
                         <IonIcon icon={homeOutline} className="text-blue-500 text-2xl" />
                         <span className="text-xs">Home</span>
                     </Link>
@@ -89,7 +112,7 @@ export default function Dashboard() {
                         <IonIcon icon={personOutline} className="text-gray-500 text-2xl" />
                         <span className="text-xs text-gray-500">Profile</span>
                     </Link>
-                </div> */}
+                </div>
             </div>
         </div>
     );

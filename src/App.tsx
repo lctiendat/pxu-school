@@ -1,7 +1,6 @@
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import Home from './pages/Home';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -32,29 +31,46 @@ import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import FaceAuth from './pages/FaceAuth';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
-import Calendar from './pages/Calendar';
+import { useDispatch } from 'react-redux';
+import { useUser } from './hook/useUser';
+import { useEffect } from 'react';
+import Profile from './pages/Profile';
 
 setupIonicReact();
 
-const App: React.FC = () => (
-  <IonApp>
+const routerAuth = ['/login']
+
+const App: React.FC = () => {
+
+  const dispatch = useDispatch();
+  const { loadUser } = useUser()
+
+  useEffect(() => {
+
+    if (!routerAuth.includes(window.location.pathname)) {
+      loadUser()
+      if (!loadUser().isLogin) {
+        window.location.href = '/login'
+      }
+    }
+  }, [dispatch])
+
+  return (<IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
-        <Route exact path="/home">
-          <FaceAuth />
-        </Route>
+       
         <Route path="/login" component={Login} exact />
+        <Route path="/profile" component={Profile} exact />
         <Route path="/dashboard" component={Dashboard} exact />
-        <Route path="/calendar" component={Calendar} exact />
         <Route exact path="/">
-          <Redirect to="/home" />
+          <Redirect to="/login" />
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>
-);
+  );
+}
 
 export default App;
